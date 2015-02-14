@@ -1,0 +1,25 @@
+body {
+    width: 450px;
+}
+
+#main {
+    margin-top: 0px;
+    width: 400px;
+    display: inline-block;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+#wordInput {
+    width: 150px;
+}
+
+#word {
+    font-weight: bold;
+}
+
+#nature {
+    font-style: italic;
+}
+
+#definition {}
