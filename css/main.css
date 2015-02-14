@@ -18,8 +18,19 @@ body {
     font-weight: bold;
 }
 
-#nature {
+.nature {
     font-style: italic;
+    color: #CF2222;
 }
 
 #definition {}
+
+.sectionTitle {
+    font-style: italic;
+    display: none;
+    color: #CF2222;
+}
+
+.section {
+    margin-left: 20px;
+}
