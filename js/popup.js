@@ -12,33 +12,30 @@ jQuery(document).ready(function () {
 
 
 function requestAPI() {
+    emptyAllSections();
     var word = $('#wordInput').val();
-    $('#word').text('');
     $('#word').text(word);
 
     getWikiQuery(word, "def", 5, "en", function (data) {
-        var definitions = data.split('|');
-        var oList = $('<ol/>');
-        $.each(definitions, function (i, v) {
-            oList.append($('<li/>', {
-                text: v
-            }));
+        if (!wordExists(data)) {
+            emptyAllSections();
+            printWordNotFoundMsg(word);
+            return;
+        }
+
+        printDefinitions(data);
+
+        getWikiQuery(word, "pos", 1, "en", function (data) {
+            printNature(data);
         });
-        $('#definitions').html('');
-        $('#definitions').append(oList);
-    });
 
-    getWikiQuery(word, "pos", 1, "en", function (data) {
-        $('#nature').text('');
-        $('#nature').text(data);
-    });
+        getWikiQuery(word, "syn", -1, "en", function (data) {
+            printSynonymsAndHypernyms(data, $('#synonyms'));
+        });
 
-    getWikiQuery(word, "syn", -1, "en", function (data) {
-        printSynonymsAndHypernyms(data, $('#synonyms'));
-    });
-
-    getWikiQuery(word, "hyper", -1, "en", function (data) {
-        printSynonymsAndHypernyms(data, $('#hypernyms'));
+        getWikiQuery(word, "hyper", -1, "en", function (data) {
+            printSynonymsAndHypernyms(data, $('#hypernyms'));
+        });
     });
 }
 
@@ -49,6 +46,40 @@ function printSynonymsAndHypernyms(data, container) {
         result += v + ', ';
     });
     $('.sectionTitle').show();
-    container.text('');
     container.text(result);
+}
+
+function printNature(data) {
+    $('#nature').text(data);
+}
+
+function printDefinitions(data) {
+    var definitions = data.split('|');
+    var oList = $('<ol/>');
+    $.each(definitions, function (i, v) {
+        oList.append($('<li/>', {
+            text: v
+        }));
+    });
+    $('#definitions').append(oList);
+}
+
+function wordExists(data) {
+    if (data.indexOf('No such word for specified language') > -1 || data.indexOf('The Wiktionary API did not return a page for that word') > -1)
+        return false;
+    return true;
+}
+
+function emptyAllSections() {
+    $('#word').text('');
+    $('#nature').text('');
+    $('#definitions').html('');
+    $('#synonyms').text('');
+    $('#hypernyms').text('');
+    $('#wordNotFound').text('');
+    $('.sectionTitle').hide();
+}
+
+function printWordNotFoundMsg(word) {
+    $('#wordNotFound').html('<b>' + word + '</b> was not found in the current languages');
 }

@@ -34,3 +34,7 @@ body {
 .section {
     margin-left: 20px;
 }
+
+#wordNotFound {
+    font-style: italic;
+}
