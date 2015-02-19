@@ -38,3 +38,8 @@ body {
 #wordNotFound {
     font-style: italic;
 }
+
+#preloader {
+    text-align: center;
+    display: none;
+}

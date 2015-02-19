@@ -3,6 +3,7 @@ jQuery(document).ready(function () {
         requestAPI();
     });
 
+    // On Enter keyboard pressed
     jQuery(document).keypress(function (e) {
         if (e.which == 13) {
             requestAPI();
@@ -12,6 +13,7 @@ jQuery(document).ready(function () {
 
 
 function requestAPI() {
+    setPreloaderState(true);
     emptyAllSections();
     var word = $('#wordInput').val();
     $('#word').text(word);
@@ -20,6 +22,7 @@ function requestAPI() {
         if (!wordExists(data)) {
             emptyAllSections();
             printWordNotFoundMsg(word);
+            setPreloaderState(false);
             return;
         }
 
@@ -35,6 +38,7 @@ function requestAPI() {
 
         getWikiQuery(word, "hyper", -1, "en", function (data) {
             printSynonymsAndHypernyms(data, $('#hypernyms'));
+            setPreloaderState(false);
         });
     });
 }
@@ -82,4 +86,14 @@ function emptyAllSections() {
 
 function printWordNotFoundMsg(word) {
     $('#wordNotFound').html('<b>' + word + '</b> was not found in the current languages');
+}
+
+function setPreloaderState(active) {
+    if (active == true) {
+        $('#preloader').show();
+        $('#main').hide();
+    } else {
+        $('#preloader').hide();
+        $('#main').show();
+    }
 }
