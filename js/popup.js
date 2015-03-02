@@ -1,42 +1,50 @@
 jQuery(document).ready(function () {
     jQuery('#button').click(function () {
-        requestAPI();
+        requestApi();
     });
 
     // On Enter keyboard pressed
     jQuery(document).keypress(function (e) {
         if (e.which == 13) {
-            requestAPI();
+            requestApi();
         }
     })
 });
 
 
-function requestAPI() {
+function requestApi() {
     setPreloaderState(true);
     emptyAllSections();
     var word = $('#wordInput').val();
+    requestApiByLanguage(word, "en");
+}
+
+function requestApiByLanguage(word, lang) {
     $('#word').text(word);
 
-    getWikiQuery(word, "def", 5, "en", function (data) {
+    getWikiQuery(word, "def", 5, lang, function (data) {
         if (!wordExists(data)) {
             emptyAllSections();
-            printWordNotFoundMsg(word);
-            setPreloaderState(false);
+            if (lang == "fr") {
+                printWordNotFoundMsg(word);
+                setPreloaderState(false);
+            } else {
+                requestApiByLanguage(word, "fr");
+            }
             return;
         }
 
         printDefinitions(data);
 
-        getWikiQuery(word, "pos", 1, "en", function (data) {
+        getWikiQuery(word, "pos", 1, lang, function (data) {
             printNature(data);
         });
 
-        getWikiQuery(word, "syn", -1, "en", function (data) {
+        getWikiQuery(word, "syn", -1, lang, function (data) {
             printSynonymsAndHypernyms(data, $('#synonyms'));
         });
 
-        getWikiQuery(word, "hyper", -1, "en", function (data) {
+        getWikiQuery(word, "hyper", -1, lang, function (data) {
             printSynonymsAndHypernyms(data, $('#hypernyms'));
             setPreloaderState(false);
         });
