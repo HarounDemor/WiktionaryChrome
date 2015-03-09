@@ -1,16 +1,23 @@
 {
-  "manifest_version": 2,
+    "manifest_version": 2,
 
-  "name": "One-click Wikitionnaire",
-  "description": "Wikitionnaire Chrome Extension",
-  "version": "1.0",
+    "name": "One-click Wikitionnaire",
+    "description": "Wikitionnaire Chrome Extension",
+    "version": "1.0",
 
-  "browser_action": {
-    "default_icon": "icon.png",
-    "default_popup": "popup.html"
-  },
+    "browser_action": {
+        "default_icon": "icon.png",
+        "default_popup": "popup.html"
+    },
 
-  "permissions": [
+    "permissions": [
     "http://www.igrec.ca/project-files/wikparser/"
-  ]
+  ],
+
+    "content_scripts": [
+        {
+            "matches": ["<all_urls>"],
+            "js": ["js/jquery-2.1.3.min.js", "js/contentScriptPopup.js"]
+        }
+    ]
 }
